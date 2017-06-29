@@ -13,7 +13,6 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
-
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
@@ -80,23 +79,31 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        if(player.y<0)
-        {
-            reset();
-            var victory=new Audio('audio/victory.mp3');
+        if (player.y < 0) {
+            var victory = new Audio('audio/victory.mp3');
             victory.play();
-        }
-        else {
+            reset();
+        } else {
             checkCollisions();
             spawnEnemys(false);
         }
     }
+
+    /**
+     * @description A function to check for collisions between enemy and player
+     */
     function checkCollisions() {
-        var pX=player.x+25,pY=player.y,pW=101-25,pH=100,eW=101,eH=50;
-        allEnemies.forEach(function (enemy) {
-           var eX=enemy.x,eY=enemy.y+10;
-            if(pX<eX+eW&&pX+pW>eX&&pY<eY+eH&&pH+pY>eY){
-                var defeat=new Audio('audio/defeat.mp3');
+        var pX = player.x + 25,
+            pY = player.y,
+            pW = 76,
+            pH = 100,
+            eW = 101,
+            eH = 50; //declared dimensions of player and enemy
+        allEnemies.forEach(function(enemy) {
+            var eX = enemy.x,
+                eY = enemy.y + 10;
+            if (pX < eX + eW && pX + pW > eX && pY < eY + eH && pH + pY > eY) { //collision algorithm
+                var defeat = new Audio('audio/defeat.mp3'); //Audio for defeat
                 defeat.play();
                 reset();
                 console.log('collision detected !');
@@ -114,7 +121,6 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -128,12 +134,12 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
+                'images/water-block.png', // Top row is water
+                'images/stone-block.png', // Row 1 of 3 of stone
+                'images/stone-block.png', // Row 2 of 3 of stone
+                'images/stone-block.png', // Row 3 of 3 of stone
+                'images/grass-block.png', // Row 1 of 2 of grass
+                'images/grass-block.png' // Row 2 of 2 of grass
             ],
             numRows = 6,
             numCols = 5,
@@ -179,8 +185,8 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        allEnemies=[];
-        spawnEnemys(true);
+        allEnemies = [];
+        spawnEnemys(true); //true spawns enemies all over the canvas
         player.reset();
     }
 
