@@ -1,8 +1,8 @@
 //-----------------------Enemies section---------------------------
 var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
-    this.velocity = 75 + 100 * Math.random();
-    this.boost = false;
+    this.velocity = 75 + 100 * Math.random(); //random velocity between 75-175
+    this.boost = false; //Flag which tells if the object is boosted beyond its velocity
 };
 
 /**
@@ -10,21 +10,20 @@ var Enemy = function() {
  * @param {float} dt - a time delta between ticks
  */
 Enemy.prototype.update = function(dt) {
-    if (this.y === player.y + 8.5 && this.x < player.x) {
+    if (this.y === player.y + 8.5 && this.x < player.x) { //if the player is in the same row with an enemy
         if (!this.boost) {
             this.original = this.velocity;
             this.boost = true;
-            this.velocity += 50;
+            this.velocity += 50; //boost the velocity of the enemy
         }
     } else if (this.boost) {
-        this.velocity = this.original;
+        this.velocity = this.original; //return to normal velocity once the player moved away
         this.boost = false;
     }
     this.x += this.velocity * dt;
     if (this.x >= 505) {
-        console.log('exited screen !');
         var rem = this;
-        allEnemies = allEnemies.filter(function(e) {
+        allEnemies = allEnemies.filter(function(e) { //remove enemy once it has exited the canvas completely
             return e !== rem;
         });
     }
