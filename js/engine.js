@@ -80,9 +80,29 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        if(player.y<0)
+        {
+            reset();
+            var victory=new Audio('audio/victory.mp3');
+            victory.play();
+        }
+        else {
+            checkCollisions();
+            spawnEnemys(false);
+        }
     }
-
+    function checkCollisions() {
+        var pX=player.x+25,pY=player.y,pW=101-25,pH=100,eW=101,eH=50;
+        allEnemies.forEach(function (enemy) {
+           var eX=enemy.x,eY=enemy.y+10;
+            if(pX<eX+eW&&pX+pW>eX&&pY<eY+eH&&pH+pY>eY){
+                var defeat=new Audio('audio/defeat.mp3');
+                defeat.play();
+                reset();
+                console.log('collision detected !');
+            }
+        });
+    }
     /* This is called by the update function and loops through all of the
      * objects within your allEnemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
@@ -159,7 +179,9 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        allEnemies=[];
+        spawnEnemys(true);
+        player.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
